@@ -1,0 +1,39 @@
+---
+title: "Housing Prices"
+author: "Rajeev Kumar Yadav"
+format: html
+execute: 
+  echo: false
+---
+
+```{r}
+#| label: setup
+#| message: false
+
+library(tidyverse)
+library(brms)
+library(gtsummary)
+
+housing <- read_csv("data/housing.csv", show_col_types = FALSE)
+
+```
+
+```{r}
+#| label: model
+#| cache: true
+
+fit1 <- brm(formula = price ~ area + bedrooms + stories
+            + mainroad + guestroom + basement + hotwaterheating
+            + airconditioning + parking + prefarea + furnishingstatus,
+            data = housing,
+            family = gaussian(),
+            refresh = 0,
+            silent = 2,
+            seed = 9
+            )
+```
+
+```{r}
+
+tbl_regression(fit1)
+```
